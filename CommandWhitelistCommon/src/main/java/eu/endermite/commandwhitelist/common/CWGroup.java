@@ -63,8 +63,10 @@ public class CWGroup {
     public HashMap<String, Object> serialize() {
         HashMap<String, Object> serializedGroup = new LinkedHashMap<>();
         List<String> commands = new ArrayList<>(this.commands);
+        List<String> hiddenCommands = new ArrayList<>(this.hiddenCommands);
         List<String> subCommands = new ArrayList<>(this.subCommands);
         serializedGroup.put("commands", commands);
+        serializedGroup.put("hidden_commands", hiddenCommands);
         serializedGroup.put("subcommands", subCommands);
         return serializedGroup;
     }
