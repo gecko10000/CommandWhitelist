@@ -65,6 +65,9 @@ public class CWGroup {
         List<String> commands = new ArrayList<>(this.commands);
         List<String> hiddenCommands = new ArrayList<>(this.hiddenCommands);
         List<String> subCommands = new ArrayList<>(this.subCommands);
+        commands.sort(Comparator.naturalOrder());
+        hiddenCommands.sort(Comparator.naturalOrder());
+        subCommands.sort(Comparator.naturalOrder());
         serializedGroup.put("commands", commands);
         serializedGroup.put("hidden_commands", hiddenCommands);
         serializedGroup.put("subcommands", subCommands);
