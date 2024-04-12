@@ -91,7 +91,7 @@ public class ConfigCache {
         List<String> defaultHiddenCommands = new ArrayList<>();
         defaultHiddenCommands.add("cmi");
 
-        config.addDefault("groups.default", new CWGroup("default", defaultCommands, new HashSet<>(), defaultSubcommands, defaultCustomCommandDeniedMessage).serialize());
+        config.addDefault("groups.default", new CWGroup("default", defaultCommands, defaultHiddenCommands, defaultSubcommands, defaultCustomCommandDeniedMessage).serialize());
 
         prefix = config.getString("messages.prefix");
         command_denied = config.getString("messages.command_denied");
