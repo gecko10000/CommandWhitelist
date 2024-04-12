@@ -118,6 +118,16 @@ public class CommandWhitelistBukkit extends JavaPlugin {
         return commandList;
     }
 
+    public static HashSet<String> getHiddenCommands(Player player) {
+        HashSet<String> hiddenCommandList = new HashSet<>();
+        HashMap<String, CWGroup> groups = configCache.getGroupList();
+        for (Map.Entry<String, CWGroup> s : groups.entrySet()) {
+            if (s.getKey().equalsIgnoreCase("default") || player.hasPermission(s.getValue().getPermission()))
+                hiddenCommandList.addAll(s.getValue().getHiddenCommands());
+        }
+        return hiddenCommandList;
+    }
+
     /**
      * @param player Bukkit Player
      * @return subcommands unavailable for the player

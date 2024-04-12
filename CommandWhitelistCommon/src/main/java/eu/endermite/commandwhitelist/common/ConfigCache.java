@@ -88,8 +88,10 @@ public class ConfigCache {
         defaultSubcommands.add("help about");
 
         String defaultCustomCommandDeniedMessage = "";
+        List<String> defaultHiddenCommands = new ArrayList<>();
+        defaultHiddenCommands.add("cmi");
 
-        config.addDefault("groups.default", new CWGroup("default", defaultCommands, defaultSubcommands, defaultCustomCommandDeniedMessage).serialize());
+        config.addDefault("groups.default", new CWGroup("default", defaultCommands, new HashSet<>(), defaultSubcommands, defaultCustomCommandDeniedMessage).serialize());
 
         prefix = config.getString("messages.prefix");
         command_denied = config.getString("messages.command_denied");
@@ -143,6 +145,16 @@ public class ConfigCache {
             if (commands.contains(cmd)) continue;
             commands.add(cmd);
         }
+        Set<String> hiddenCommands = new HashSet<>();
+        for (String hiddenCmd : section.getStringList(id + ".hidden_commands")) {
+            if (hiddenCmd.contains(" ")) {
+                String[] cmdSplit = hiddenCmd.split(" ");
+                warn("CommandWhitelist - \"" + hiddenCmd + "\" is not a command. Loading it as \"" + cmdSplit[0] + "\".");
+                hiddenCmd = cmdSplit[0];
+            }
+            if (commands.contains(hiddenCmd)) continue;
+            hiddenCommands.add(hiddenCmd);
+        }
         List<String> subCommands = new ArrayList<>();
         for (String subCmd : section.getStringList(id + ".subcommands")) {
             if (!subCmd.contains(" ")) {
@@ -152,7 +164,7 @@ public class ConfigCache {
             subCommands.add(subCmd);
         }
         String customCommandDeniedMessage = section.getString(id + ".custom_command_denied_message");
-        return new CWGroup(id, commands, subCommands, customCommandDeniedMessage);
+        return new CWGroup(id, commands, hiddenCommands, subCommands, customCommandDeniedMessage);
     }
 
     public void saveCWGroup(String id, CWGroup group) {
