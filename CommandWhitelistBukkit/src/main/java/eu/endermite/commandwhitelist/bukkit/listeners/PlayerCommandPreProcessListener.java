@@ -1,5 +1,6 @@
 package eu.endermite.commandwhitelist.bukkit.listeners;
 
+import com.Zrips.CMI.CMI;
 import eu.endermite.commandwhitelist.bukkit.CommandWhitelistBukkit;
 import eu.endermite.commandwhitelist.common.CWPermission;
 import eu.endermite.commandwhitelist.common.CommandUtil;
@@ -27,6 +28,7 @@ public class PlayerCommandPreProcessListener implements Listener {
         HashSet<String> commands = CommandWhitelistBukkit.getCommands(player);
         if (!commands.contains(label)) {
             event.setCancelled(true);
+            CMI.getInstance().getPlayerManager().sendMessageToCommandSpies(player, event.getMessage());
             audiences.player(player).sendMessage(CWCommand.miniMessage.deserialize(config.prefix + CommandWhitelistBukkit.getCommandDeniedMessage(label)));
             return;
         }
@@ -36,6 +38,7 @@ public class PlayerCommandPreProcessListener implements Listener {
         for (String bannedSubCommand : bannedSubCommands) {
             if (messageWithoutSlash.startsWith(bannedSubCommand)) {
                 event.setCancelled(true);
+                CMI.getInstance().getPlayerManager().sendMessageToCommandSpies(player, event.getMessage());
                 audiences.player(player).sendMessage(CWCommand.miniMessage.deserialize(config.prefix + config.subcommand_denied));
                 return;
             }
